@@ -1,74 +1,103 @@
-$(function() {
-  // 点击“去注册账号”的链接
-  $('#link_reg').on('click', function() {
+$(function () {
+  //  1-4-4 用获取id实现 点击两个链接跳转到不同页面
+  $('#link_reg').on('click', function () {
     $('.login-box').hide()
     $('.reg-box').show()
   })
 
-  // 点击“去登录”的链接
-  $('#link_login').on('click', function() {
+   $('#link_login').on('click', function () {
     $('.login-box').show()
     $('.reg-box').hide()
   })
+  
+  // 1-10 自定义表单密码框校验规则 原来的只是必填项不能空
+  // 1-10-1 现在加入控制在6-12位
 
-  // 从 layui 中获取 form 对象
-  var form = layui.form
-  var layer = layui.layer
-  // 通过 form.verify() 函数自定义校验规则
+  // 从layui中获取form对象 语法类似jq 只有导入js文件 可全局使用layui
+  const form=layui.form
+
+// 1-11-2 本来注册成功或失败是在打印框打印的 若需要用户看到 
+// 就用到了layui的内置模块的弹出层 内置方法的msg选项
+// 同样需要申明layer对象
+ const layer=layui.layer
+  
+
+  // 这段复制
   form.verify({
-    // 自定义了一个叫做 pwd 校验规则
-    pwd: [/^[\S]{6,12}$/, '密码必须6到12位，且不能出现空格'],
-    // 校验两次密码是否一致的规则
-    repwd: function(value) {
-      // 通过形参拿到的是确认密码框中的内容
-      // 还需要拿到密码框中的内容
-      // 然后进行一次等于的判断
-      // 如果判断失败,则return一个提示消息即可
-      var pwd = $('.reg-box [name=password]').val()
-      if (pwd !== value) {
-        return '两次密码不一致！'
+  // 校验规则名字是pwd
+  pwd: [
+    /^[\S]{6,12}$/
+    ,'密码必须6到12位，且不能出现空格'
+  ] ,
+// 1-10-2 此时发现需要添加一个两次密码需输入一致的规则
+repwd:function(value){
+  // 通过形参拿到的是确认密码框的内容 再拿到密码框的内容
+  // 进行一次等于判断  若判断错误就把return 提示消息
+// []是属性选择器
+  var pwd=$('.reg-box [name=password]').val()
+      if(pwd!==value){
+        return '两次密码输入不一致'
       }
-    }
-  })
+}
+  });   
 
-  // 监听注册表单的提交事件
-  $('#form_reg').on('submit', function(e) {
-    // 1. 阻止默认的提交行为
-    e.preventDefault()
-    // 2. 发起Ajax的POST请求
-    var data = {
-      username: $('#form_reg [name=username]').val(),
-      password: $('#form_reg [name=password]').val()
-    }
-    $.post('/api/reguser', data, function(res) {
-      if (res.status !== 0) {
-        return layer.msg(res.message)
-      }
-      layer.msg('注册成功，请登录！')
-      // 模拟人的点击行为
-      $('#link_login').click()
-    })
-  })
-
-  // 监听登录表单的提交事件
-  $('#form_login').submit(function(e) {
-    // 阻止默认提交行为
+  // 1-11 监听注册表单的提交事件
+  // 阻止默认提交行为 发起ajax请求 
+// 1-11-1
+  $('#form-reg').on('submit',function(e){
     e.preventDefault()
     $.ajax({
-      url: '/api/login',
-      method: 'POST',
-      // 快速获取表单中的数据
-      data: $(this).serialize(),
-      success: function(res) {
-        if (res.status !== 0) {
-          return layer.msg('登录失败！')
-        }
-        layer.msg('登录成功！')
-        // 将登录成功得到的 token 字符串，保存到 localStorage 中
-        localStorage.setItem('token', res.token)
-        // 跳转到后台主页
-        location.href = '/index.html'
+      type:'post',
+      url:'/api/reguser',
+        // 这里也可以把data宅出去 var data={} ,这里只要写data,
+      data:{
+        username:$('#form-reg [name=username]').val(),
+        password:$('#form-reg [name=password]').val()
+      },
+      success:function(res){
+    
+             if(res.status!==0){
+              //  1-11-2
+                return layer.msg(res.message);
+             }
+            //  1-11-2
+            layer.msg('注册成功,请登录'); //这里不能写return 不然下面代码无法执行了
+            
+          // 1-11-3 模拟人的点击行为 可以在注册成功后自动跳到登录界面
+            $('#link_login').click()
       }
     })
   })
+
+   // 1-12 监听登录表单的提交事件
+  // 阻止默认提交行为 发起ajax请求 
+// 1-12 -1
+  $('#form-login').submit(function (e) {
+    e.preventDefault()
+
+  $.post('/api/login',
+    
+    // {
+    $(this).serialize(), //这样可以快速获取表单中的数据
+  // username: $('#form-login [name=username]').val(), 
+//     password: $('#form-login [name=password]').val()
+  // }
+  function (res) {
+  //  console.log(res);
+    if (res.status !== 0) {
+      return layer.msg('登录失败')
+    }
+    layer.msg('登录成功')
+    console.log(res.token);
+    // 1-12-3 将登录成功后的token字符串保存到localStorage中
+    // 此时浏览器应用下就存了token 后面有权限的接口都得有token才能成功
+    // token怎么用？ 在postman中 header：Authorization：token值
+    localStorage.setItem('token',res.token)
+    // 1-12-2 跳转到后台主页
+    // location.href='/index.html'
+ })
 })
+  
+
+
+ })

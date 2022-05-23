@@ -6,10 +6,103 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <!-- 1-2 导入layUi 的样式 -->
+    <link rel="stylesheet" href="./assets/lib/layui/css/layui.css">
+    <!--  1-1 导入自己的样式表 -->
+    <link rel="stylesheet" href="./assets/css/login.css">
+    <!-- 1-4 导入jquery -->
+    <script src="./assets/lib/jquery.js"></script>
+    <!-- 1-12-4 导入自己封装baseApi的js 依赖于jquery 所以放在jquery后面 -->
+    <script src="./assets/js/baseAPI.js"></script>
 </head>
 
 <body>
+    <!-- 1 基础操作  -->
+    <!-- 1-3 头部的logo区域 -->
+    <div class="layui-main">
+        <!-- 1-3-1 加一个头部居中的块 -->
+        <img src="./assets/images/logo.png" alt="">
+    </div>
 
+    <!-- 1-4登录注册区 -->
+    <div class="loginAndRegBox">
+        <!-- 1-4-2 大盒子头部区域 -->
+        <div class="title-box"></div>
+
+        <!-- 1-4-3 登录的div -->
+        <div class="login-box">
+            <!-- 1-5 从layui表单元素那里 选择 登录的表单 自己再修改样式 -->
+            <form class="layui-form" action="" id="form-login">
+                <div class="layui-form-item">
+                    <!-- <div class="layui-input-block"> -->
+                    <!-- 用户名 -->
+                    <!-- 1-7-2 加入layui字体图标 -->
+                    <i class="layui-icon layui-icon-username"></i>
+                    <input type="username" name="username" required lay-verify="required" placeholder="请输入用户名"
+                        autocomplete="off" class="layui-input">
+                </div>
+                <!-- </div> -->
+                <!-- 密码 -->
+                <div class="layui-form-item">
+                    <!-- 1-7-2 加入layui字体图标 -->
+                    <i class="layui-icon layui-icon-password"></i>
+                    <!-- 1-10 1-10-1需要添加自定义校验规则pwd 下面两个密码框同理-->
+                    <input type="password" name="password" required lay-verify="required|pwd" placeholder="请输入密码"
+                        autocomplete="off" class="layui-input">
+                </div>
+                <!-- 按钮 表单元素中找的按钮具有提交功能-->
+                <div class="layui-form-item">
+                    <!--1-7 继续改造该框内样式 蓝色按钮的样式 去layui里面按钮 有各种按钮的颜色  -->
+                    <button class="layui-btn layui-btn-fluid layui-btn-normal" lay-submit>登录</button>
+                    <!-- <button type="button" class="layui-btn layui-btn-fluid">登录</button> -->
+                </div>
+                <!-- 1-7-1 -->
+                <div class="layui-form-item right">
+                    <a href="javascript:;" id="link_reg">去注册账号</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- 1-4-3 注册的div -->
+        <div class="reg-box">
+            <form class="layui-form" action="" id="form-reg">
+                <div class="layui-form-item">
+                    <i class="layui-icon layui-icon-username"></i>
+                    <input type="username" name="username" required lay-verify="required" placeholder="请输入用户名"
+                        autocomplete="off" class="layui-input">
+                </div>
+
+                <!-- 密码 -->
+                <div class="layui-form-item">
+
+                    <i class="layui-icon layui-icon-password"></i>
+                    <input type="password" name="password" required lay-verify="required|pwd" placeholder="请输入密码"
+                        autocomplete="off" class="layui-input">
+                </div>
+                <!-- 1-8 复制的注册页面加一个确认密码框 并把其他小细节改了-->
+                <!-- 确认密码 -->
+                <div class="layui-form-item">
+                    <i class="layui-icon layui-icon-password"></i>
+                    <input type="password" name="repassword" required lay-verify="required|repwd" placeholder="请确认密码"
+                        autocomplete="off" class="layui-input">
+                </div>
+                <!-- 按钮 表单元素中找的按钮具有提交功能-->
+                <div class="layui-form-item">
+                    <button class="layui-btn layui-btn-fluid layui-btn-normal" lay-submit>注册</button>
+                </div>
+
+                <div class="layui-form-item right">
+                    <a href="javascript:;" id="link_login">去登录账号</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <!-- 1-9  此时需要表单验证 然后在layui的表单验证里有lay-verify属性是控制表单验证方式的
+    虽然input输入框已经有该属性 但不生效的原因是没有加入layui的js效果 所以此时导入js文件-->
+    <script src="./assets/lib/layui/layui.all.js"></script>
+    <!-- 1-4 导入自己的javascript脚本 -->
+    <script src="./assets/js/login.js"></script>
 </body>
 
 </html>
